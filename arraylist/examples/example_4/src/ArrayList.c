@@ -159,11 +159,12 @@ int al_contains(ArrayList* this, void* pElement)
     if(this!=NULL && pElement!=NULL)
     {
         returnAux = 0;
-        for(i=0;i<=this->size;i++)
+        for(i=0;i<this->size;i++)
         {
             if(this->pElements[i] == pElement)
             {
                 returnAux = 1;
+                break;
             }
         }
     }
@@ -212,6 +213,21 @@ int al_remove(ArrayList* this,int index)
 {
     int returnAux = -1;
 
+    if(this!=NULL && index>=0 && index<this->size)
+    {
+        this->pElements[index] = NULL;
+        if(index+1 < this->size)
+        {
+            contract(this,index);
+            returnAux = 0;
+        }
+        else
+        {
+            this->size--;
+            returnAux = 0;
+        }
+    }
+
     return returnAux;
 }
 
@@ -224,7 +240,29 @@ int al_remove(ArrayList* this,int index)
  */
 int al_clear(ArrayList* this)
 {
+    //volver reserved size a 10
     int returnAux = -1;
+    int i;
+
+    if(this!=NULL)
+    {
+        for(i=this->size-1;i<this->size;i--)
+        {
+            if(i>=0)
+            {
+                this->pElements[i] = NULL;
+                this->size--;
+            }
+            else
+            {
+                break;
+            }
+        }
+        this->reservedSize = AL_INITIAL_VALUE;
+        this = (ArrayList*)realloc(this->pElements, sizeof(ArrayList)*(this->reservedSize));
+
+        returnAux = 0;
+    }
 
     return returnAux;
 }
@@ -239,10 +277,19 @@ int al_clear(ArrayList* this)
 ArrayList* al_clone(ArrayList* this)
 {
     ArrayList* returnAux = NULL;
+    int i;
+
+    if(this!=NULL)
+    {
+        returnAux = al_newArrayList();
+        for(i=0;i<this->size;i++)
+        {
+            returnAux->add(returnAux,this->pElements[i]);
+        }
+    }
 
     return returnAux;
 }
-
 
 
 
@@ -404,6 +451,19 @@ int expand(ArrayList* this,int index)
 int contract(ArrayList* this,int index)
 {
     int returnAux = -1;
+    int i;
+
+    if(this!=NULL && index>=0 && index<this->size)
+    {
+        for(i=index;i<this->size;i++)
+        {
+            this->pElements[i] = this->pElements[i+1];
+        }
+
+        this->size--;
+
+        returnAux = 0;
+    }
 
     return returnAux;
 }
