@@ -307,14 +307,9 @@ int al_push(ArrayList* this, int index, void* pElement)
 
     if(this!=NULL && pElement!=NULL && index>=0 && index<=this->size)
     {
-        if(this->size == index)
+        this->add(this,pElement);
+        if(this->size != index)
         {
-            this->add(this,pElement);
-            returnAux = 0;
-        }
-        else
-        {
-            this->add(this,this->pElements[this->size-1]);
             expand(this,index);
             this->set(this,index,pElement);
             returnAux = 0;
@@ -334,6 +329,12 @@ int al_push(ArrayList* this, int index, void* pElement)
 int al_indexOf(ArrayList* this, void* pElement)
 {
     int returnAux = -1;
+    int index;
+
+    if(this!=NULL && pElement!=NULL)
+    {
+
+    }
 
     return returnAux;
 }
@@ -347,6 +348,18 @@ int al_indexOf(ArrayList* this, void* pElement)
 int al_isEmpty(ArrayList* this)
 {
     int returnAux = -1;
+
+    if(this!=NULL)
+    {
+        if(this->size == 0)
+        {
+            returnAux = 1;
+        }
+        else
+        {
+            returnAux = 0;
+        }
+    }
 
     return returnAux;
 }
@@ -387,8 +400,6 @@ ArrayList* al_subList(ArrayList* this,int from,int to)
 
 
 
-
-
 /** \brief Returns true if pList list contains all of the elements of pList2
  * \param pList ArrayList* Pointer to arrayList
  * \param pList2 ArrayList* Pointer to arrayList
@@ -397,10 +408,13 @@ ArrayList* al_subList(ArrayList* this,int from,int to)
  */
 int al_containsAll(ArrayList* this,ArrayList* this2)
 {
+    //llama a al_contains
     int returnAux = -1;
 
     return returnAux;
 }
+
+
 
 /** \brief Sorts objects of list, use compare pFunc
  * \param pList ArrayList* Pointer to arrayList
@@ -415,6 +429,7 @@ int al_sort(ArrayList* this, int (*pFunc)(void* ,void*), int order)
 
     return returnAux;
 }
+
 
 
 /** \brief Increment the number of elements in pList in AL_INCREMENT elements.
@@ -463,8 +478,6 @@ int expand(ArrayList* this,int index)
         {
             this->pElements[i+1] = this->pElements[i];
         }
-
-        this->size++;
 
         returnAux = 0;
     }
