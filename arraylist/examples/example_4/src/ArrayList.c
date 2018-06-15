@@ -330,10 +330,17 @@ int al_indexOf(ArrayList* this, void* pElement)
 {
     int returnAux = -1;
     int index;
+    int i;
 
     if(this!=NULL && pElement!=NULL)
     {
+        for(i=0;i<this->size-1;i++)
+        {
+            if(this->pElements[i] == pElement)
+            {
 
+            }
+        }
     }
 
     return returnAux;
@@ -375,7 +382,8 @@ int al_isEmpty(ArrayList* this)
  */
 void* al_pop(ArrayList* this,int index)
 {
-    //saca un elemento y lo devuelve para mostrarlo, moverlo a otra lista. Si no es el ultimo mueve los que le siguen. llama a remove
+    //saca un elemento y lo devuelve para hacer algo (mostrarlo, moverlo a otra lista).
+    //Si no es el ultimo mueve los que le siguen(contract). llama a remove
     void* returnAux = NULL;
 
     return returnAux;
