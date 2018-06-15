@@ -305,6 +305,22 @@ int al_push(ArrayList* this, int index, void* pElement)
     //abro espacio entre 2 elementos para meter otro. size = index? => add
     int returnAux = -1;
 
+    if(this!=NULL && pElement!=NULL && index>=0 && index<=this->size)
+    {
+        if(this->size == index)
+        {
+            this->add(this,pElement);
+            returnAux = 0;
+        }
+        else
+        {
+            this->add(this,this->pElements[this->size-1]);
+            expand(this,index);
+            this->set(this,index,pElement);
+            returnAux = 0;
+        }
+    }
+
     return returnAux;
 }
 
@@ -363,6 +379,7 @@ void* al_pop(ArrayList* this,int index)
  */
 ArrayList* al_subList(ArrayList* this,int from,int to)
 {
+    //similar a al_clone
     void* returnAux = NULL;
 
     return returnAux ;
@@ -438,6 +455,19 @@ int resizeUp(ArrayList* this)
 int expand(ArrayList* this,int index)
 {
     int returnAux = -1;
+    int i;
+
+    if(this!=NULL && index>=0 && index<this->size)
+    {
+        for(i=this->size-1;i>index;i--)
+        {
+            this->pElements[i+1] = this->pElements[i];
+        }
+
+        this->size++;
+
+        returnAux = 0;
+    }
 
     return returnAux;
 }
