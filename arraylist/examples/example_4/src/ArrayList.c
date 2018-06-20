@@ -329,16 +329,16 @@ int al_push(ArrayList* this, int index, void* pElement)
 int al_indexOf(ArrayList* this, void* pElement)
 {
     int returnAux = -1;
-    int index;
     int i;
 
     if(this!=NULL && pElement!=NULL)
     {
-        for(i=0;i<this->size-1;i++)
+        for(i=0;i<this->size;i++)
         {
             if(this->pElements[i] == pElement)
             {
-
+                returnAux = i;
+                break;
             }
         }
     }
@@ -386,6 +386,12 @@ void* al_pop(ArrayList* this,int index)
     //Si no es el ultimo mueve los que le siguen(contract). llama a remove
     void* returnAux = NULL;
 
+    if(this!=NULL && index>=0 && index<this->size)
+    {
+        returnAux = this->pElements[index];
+        this->remove(this,index);
+    }
+
     return returnAux;
 }
 
@@ -401,7 +407,25 @@ void* al_pop(ArrayList* this,int index)
 ArrayList* al_subList(ArrayList* this,int from,int to)
 {
     //similar a al_clone
-    void* returnAux = NULL;
+    ArrayList* returnAux = NULL;
+    int i;
+
+    if(this!=NULL && from>=0 && from<this->size && to>=0 && to>from && to<=this->size)
+    {
+        returnAux = al_newArrayList();
+        if(from==0 && to==this->size)
+        {
+            returnAux = this->clone(this);
+        }
+        else
+        {
+            for(i=from;i<to;i++)
+            {
+                returnAux->add(returnAux,this->pElements[i]);
+            }
+        }
+
+    }
 
     return returnAux ;
 }
@@ -418,6 +442,23 @@ int al_containsAll(ArrayList* this,ArrayList* this2)
 {
     //llama a al_contains
     int returnAux = -1;
+    int i;
+
+    if(this!=NULL && this2!=NULL)
+    {
+        returnAux = 1;
+        if(this->size == this2->size)
+        {
+            for(i=0;i<this->size;i++)
+            {
+                returnAux = this2->contains(this2,this->pElements[i]);
+            }
+        }
+        else
+        {
+            returnAux = 0;
+        }
+    }
 
     return returnAux;
 }
@@ -434,6 +475,11 @@ int al_containsAll(ArrayList* this,ArrayList* this2)
 int al_sort(ArrayList* this, int (*pFunc)(void* ,void*), int order)
 {
     int returnAux = -1;
+
+    if(this!=NULL && pFunc!=NULL)
+    {
+        returnAux = 0;
+    }
 
     return returnAux;
 }
