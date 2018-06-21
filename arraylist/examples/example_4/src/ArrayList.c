@@ -74,7 +74,7 @@ int al_add(ArrayList* this, void* pElement)
 
     if(this!=NULL && pElement!=NULL)
     {
-        if(this->size == this->reservedSize)
+        if(this->len(this) == this->reservedSize)
         {
             aux = resizeUp(this);
         }
@@ -134,7 +134,7 @@ int al_len(ArrayList* this)
 void* al_get(ArrayList* this, int index)
 {
     void* returnAux = NULL;
-    if(this!=NULL && index>=0 && index<this->size)
+    if(this!=NULL && index>=0 && index<this->len(this))
     {
         returnAux = this->pElements[index];
     }
@@ -159,7 +159,7 @@ int al_contains(ArrayList* this, void* pElement)
     if(this!=NULL && pElement!=NULL)
     {
         returnAux = 0;
-        for(i=0;i<this->size;i++)
+        for(i=0;i<this->len(this);i++)
         {
             if(this->pElements[i] == pElement)
             {
@@ -185,9 +185,9 @@ int al_set(ArrayList* this, int index,void* pElement)
 {
     int returnAux = -1;
 
-    if(this!=NULL && pElement!=NULL && index>=0 && index<=this->size)
+    if(this!=NULL && pElement!=NULL && index>=0 && index<=this->len(this))
     {
-        if(this->size == index)
+        if(this->len(this) == index)
         {
             this->add(this,pElement);
             returnAux = 0;
@@ -213,10 +213,10 @@ int al_remove(ArrayList* this,int index)
 {
     int returnAux = -1;
 
-    if(this!=NULL && index>=0 && index<this->size)
+    if(this!=NULL && index>=0 && index<this->len(this))
     {
         this->pElements[index] = NULL;
-        if(index+1 < this->size)
+        if(index+1 < this->len(this))
         {
             contract(this,index);
             returnAux = 0;
@@ -246,7 +246,7 @@ int al_clear(ArrayList* this)
 
     if(this!=NULL)
     {
-        for(i=this->size-1;i<this->size;i--)
+        for(i=this->len(this)-1;i<this->len(this);i--)
         {
             if(i>=0)
             {
@@ -282,7 +282,7 @@ ArrayList* al_clone(ArrayList* this)
     if(this!=NULL)
     {
         returnAux = al_newArrayList();
-        for(i=0;i<this->size;i++)
+        for(i=0;i<this->len(this);i++)
         {
             returnAux->add(returnAux,this->pElements[i]);
         }
@@ -305,10 +305,10 @@ int al_push(ArrayList* this, int index, void* pElement)
     //abro espacio entre 2 elementos para meter otro. size = index? => add
     int returnAux = -1;
 
-    if(this!=NULL && pElement!=NULL && index>=0 && index<=this->size)
+    if(this!=NULL && pElement!=NULL && index>=0 && index<=this->len(this))
     {
         this->add(this,pElement);
-        if(this->size != index)
+        if(this->len(this) != index)
         {
             expand(this,index);
             this->set(this,index,pElement);
@@ -333,7 +333,7 @@ int al_indexOf(ArrayList* this, void* pElement)
 
     if(this!=NULL && pElement!=NULL)
     {
-        for(i=0;i<this->size;i++)
+        for(i=0;i<this->len(this);i++)
         {
             if(this->pElements[i] == pElement)
             {
@@ -358,7 +358,7 @@ int al_isEmpty(ArrayList* this)
 
     if(this!=NULL)
     {
-        if(this->size == 0)
+        if(this->len(this) == 0)
         {
             returnAux = 1;
         }
@@ -386,7 +386,7 @@ void* al_pop(ArrayList* this,int index)
     //Si no es el ultimo mueve los que le siguen(contract). llama a remove
     void* returnAux = NULL;
 
-    if(this!=NULL && index>=0 && index<this->size)
+    if(this!=NULL && index>=0 && index<this->len(this))
     {
         returnAux = this->pElements[index];
         this->remove(this,index);
@@ -410,10 +410,10 @@ ArrayList* al_subList(ArrayList* this,int from,int to)
     ArrayList* returnAux = NULL;
     int i;
 
-    if(this!=NULL && from>=0 && from<this->size && to>=0 && to>from && to<=this->size)
+    if(this!=NULL && from>=0 && from<this->len(this) && to>=0 && to>from && to<=this->len(this))
     {
         returnAux = al_newArrayList();
-        if(from==0 && to==this->size)
+        if(from==0 && to==this->len(this))
         {
             returnAux = this->clone(this);
         }
@@ -447,9 +447,9 @@ int al_containsAll(ArrayList* this,ArrayList* this2)
     if(this!=NULL && this2!=NULL)
     {
         returnAux = 1;
-        if(this->size == this2->size)
+        if(this->len(this) == this2->len(this2))
         {
-            for(i=0;i<this->size;i++)
+            for(i=0;i<this->len(this);i++)
             {
                 returnAux = this2->contains(this2,this->pElements[i]);
             }
